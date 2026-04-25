@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Norway 2026 — 12 Day Itinerary | Akshay & Neeti</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    background: #0a0a0a;
+    color: #f5f5f7;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    height: 100%;
+    overflow: hidden;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  body.cursor-hidden { cursor: none; }
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 60px 80px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s ease;
+    overflow-y: auto;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide-inner { width: 100%; max-width: 1200px; }
+
+  h1 { font-size: 88px; font-weight: 700; line-height: 1.05; letter-spacing: -0.04em; color: #fff; }
+  h2 { font-size: 56px; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin-bottom: 8px; }
+  h3 { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 6px; letter-spacing: -0.02em; }
+  .eyebrow { font-size: 14px; text-transform: uppercase; letter-spacing: 0.18em; color: #DA7756; margin-bottom: 20px; font-weight: 600; }
+  .subtext { font-size: 20px; color: #86868b; margin-top: 14px; line-height: 1.5; }
+  strong { color: #fff; font-weight: 700; }
+
+  /* Progress dots */
+  .dots {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; z-index: 100;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s; cursor: pointer; }
+  .dot.active { background: #DA7756; width: 22px; border-radius: 4px; }
+
+  .counter {
+    position: fixed; top: 28px; right: 32px; font-size: 13px; color: #86868b;
+    letter-spacing: 0.1em; font-weight: 500; z-index: 100;
+  }
+
+  /* COMPONENTS */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 28px;
+  }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
+  .stat .num { font-size: 64px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -0.04em; }
+  .stat .num span { color: #DA7756; }
+  .stat .label { font-size: 13px; color: #86868b; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 10px; }
+
+  /* Day timeline */
+  .day-header {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .day-num { font-size: 14px; color: #DA7756; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+  .day-date { font-size: 16px; color: #86868b; }
+
+  .timeline { display: flex; flex-direction: column; gap: 10px; }
+  .tline {
+    display: grid; grid-template-columns: 100px 1fr; gap: 24px;
+    padding: 14px 18px; background: rgba(255,255,255,0.03);
+    border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);
+    align-items: start;
+  }
+  .tline .time { font-size: 14px; font-weight: 600; color: #DA7756; padding-top: 2px; letter-spacing: 0.05em; }
+  .tline .what { font-size: 16px; color: #f5f5f7; line-height: 1.5; }
+  .tline .what b { color: #fff; font-weight: 700; }
+  .tline .hint { display: block; font-size: 13px; color: #86868b; margin-top: 4px; }
+
+  /* 2-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  /* Pill row */
+  .pill { display: inline-block; padding: 6px 14px; border-radius: 999px;
+    background: rgba(218,119,86,0.12); color: #DA7756;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; }
+
+  /* Booking cards */
+  .booking-row { display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 22px; background: rgba(255,255,255,0.03);
+    border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 10px;
+  }
+  .booking-row .b-left { display: flex; flex-direction: column; gap: 4px; }
+  .booking-row .b-name { font-size: 17px; font-weight: 600; color: #fff; }
+  .booking-row .b-meta { font-size: 13px; color: #86868b; }
+  .booking-row .b-right { font-size: 14px; color: #DA7756; font-weight: 600; }
+
+  /* Big route flow */
+  .flow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 30px; justify-content: center; }
+  .flow .step {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 16px 22px; border-radius: 14px;
+    min-width: 160px; text-align: center;
+  }
+  .flow .step .city { font-size: 18px; font-weight: 700; color: #fff; }
+  .flow .step .time { font-size: 12px; color: #86868b; margin-top: 4px; letter-spacing: 0.05em; }
+  .flow .arrow { color: #DA7756; font-size: 22px; font-weight: 600; }
+
+  /* Tips list */
+  .tips { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+  .tip {
+    display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start;
+    padding: 14px 18px; background: rgba(255,255,255,0.03); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .tip .icon { font-size: 22px; }
+  .tip .body { font-size: 15px; color: #f5f5f7; line-height: 1.5; }
+  .tip .body b { color: #DA7756; font-weight: 700; }
+
+  /* Mockup style for cost panel */
+  .cost-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+  .cost-table tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .cost-table td { padding: 12px 8px; font-size: 15px; color: #f5f5f7; }
+  .cost-table td:last-child { text-align: right; color: #DA7756; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .cost-table tr.total td { font-weight: 700; color: #fff; padding-top: 18px; border-bottom: none; font-size: 17px; }
+  .cost-table tr.total td:last-child { color: #DA7756; }
+
+  /* Hero / cover */
+  .cover { text-align: center; }
+  .cover h1 { font-size: 110px; }
+  .cover .tag { font-size: 22px; color: #86868b; margin-top: 22px; letter-spacing: 0.04em; }
+  .cover .meta {
+    margin-top: 56px; display: flex; gap: 36px; justify-content: center; align-items: center;
+    color: #86868b; font-size: 15px;
+  }
+  .cover .meta strong { color: #fff; }
+  .cover .accent { color: #DA7756; }
+
+  .help {
+    position: fixed; bottom: 28px; right: 28px; font-size: 12px; color: #5a5a5e;
+    letter-spacing: 0.08em; z-index: 100;
+  }
+  .help kbd {
+    display: inline-block; padding: 2px 7px; background: rgba(255,255,255,0.06);
+    border-radius: 5px; font-family: inherit; margin: 0 2px;
+  }
+
+  /* Bergen 5-day card grid */
+  .b-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; }
+  .b-day { padding: 18px 14px; border-radius: 14px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06); }
+  .b-day .b-d-num { font-size: 11px; letter-spacing: 0.15em; color: #DA7756; font-weight: 700; text-transform: uppercase; }
+  .b-day .b-d-date { font-size: 13px; color: #86868b; margin-top: 4px; }
+  .b-day .b-d-title { font-size: 17px; color: #fff; font-weight: 700; margin-top: 12px; line-height: 1.25; }
+  .b-day .b-d-body { font-size: 13px; color: #b0b0b5; margin-top: 8px; line-height: 1.45; }
+  .b-day .b-d-cost { font-size: 12px; color: #DA7756; margin-top: 12px; font-weight: 600; }
+
+  /* Activity book card */
+  .act-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  .act { padding: 18px 22px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+  .act .act-name { font-size: 17px; font-weight: 700; color: #fff; }
+  .act .act-when { font-size: 12px; color: #DA7756; letter-spacing: 0.08em; margin-top: 4px; text-transform: uppercase; font-weight: 600; }
+  .act .act-where { font-size: 13px; color: #86868b; margin-top: 10px; line-height: 1.5; }
+  .act .act-where b { color: #f5f5f7; font-weight: 600; }
+  .act .act-price { font-size: 15px; color: #fff; font-weight: 600; margin-top: 10px; }
+
+  /* Scrollbar */
+  .slide::-webkit-scrollbar { width: 6px; }
+  .slide::-webkit-scrollbar-track { background: transparent; }
+  .slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  @media (max-height: 800px) {
+    .slide { padding: 30px 60px; }
+    h1 { font-size: 64px; }
+    .cover h1 { font-size: 78px; }
+    h2 { font-size: 40px; }
+    .stat .num { font-size: 48px; }
+  }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 1024px) {
+    .slide { padding: 40px 50px; }
+    h1 { font-size: 64px; }
+    .cover h1 { font-size: 76px; }
+    h2 { font-size: 44px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .b-grid { grid-template-columns: repeat(2, 1fr); }
+    .three-col { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 720px) {
+    html, body { overflow-y: auto; height: auto; min-height: 100%; }
+    .deck { width: 100%; height: auto; min-height: 100vh; }
+    .slide {
+      position: relative !important;
+      width: 100%; height: auto; min-height: 100vh;
+      padding: 70px 20px 90px;
+      opacity: 1 !important; pointer-events: auto !important;
+      transition: none;
+      display: block;
+      overflow-y: visible;
+    }
+    .slide-inner { max-width: 100%; }
+
+    h1 { font-size: 42px; line-height: 1.1; }
+    .cover h1 { font-size: 48px; }
+    h2 { font-size: 30px; line-height: 1.15; }
+    h3 { font-size: 22px; }
+    .eyebrow { font-size: 11px; margin-bottom: 14px; letter-spacing: 0.15em; }
+    .subtext { font-size: 16px; }
+    .pill { font-size: 11px; padding: 5px 12px; }
+
+    /* Stack everything */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 24px; }
+    .stat .num { font-size: 40px; }
+    .stat .label { font-size: 11px; }
+    .stat.card { padding: 18px; }
+
+    .b-grid { grid-template-columns: 1fr; gap: 10px; }
+    .b-day { padding: 16px; }
+    .b-day .b-d-title { font-size: 18px; }
+
+    .two-col { grid-template-columns: 1fr; gap: 16px; }
+    .three-col { grid-template-columns: 1fr; gap: 12px; }
+    .act-grid { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Day timeline tweaks */
+    .day-header { flex-direction: column; align-items: flex-start; gap: 4px; padding-bottom: 14px; margin-bottom: 18px; }
+    .day-num { font-size: 12px; }
+    .day-date { font-size: 14px; line-height: 1.3; }
+    .tline {
+      grid-template-columns: 70px 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+    .tline .time { font-size: 12px; padding-top: 1px; }
+    .tline .what { font-size: 14px; line-height: 1.45; }
+    .tline .hint { font-size: 12px; }
+
+    /* Booking rows stack */
+    .booking-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 14px 16px;
+    }
+    .booking-row .b-name { font-size: 15px; }
+    .booking-row .b-meta { font-size: 12px; line-height: 1.45; }
+    .booking-row .b-right { font-size: 13px; }
+
+    /* Flow stacks vertical */
+    .flow { flex-direction: column; gap: 10px; margin-top: 26px; }
+    .flow .step { width: 100%; min-width: 0; padding: 14px; }
+    .flow .arrow { transform: rotate(90deg); font-size: 18px; }
+
+    /* Cover meta wraps */
+    .cover .meta { flex-direction: column; gap: 8px; margin-top: 32px; font-size: 14px; }
+    .cover .meta span:nth-child(2),
+    .cover .meta span:nth-child(4) { display: none; }
+    .cover .tag { font-size: 16px; margin-top: 16px; }
+
+    /* Cards & tips */
+    .card { padding: 16px; }
+    .tip { grid-template-columns: 28px 1fr; padding: 12px 14px; }
+    .tip .icon { font-size: 18px; }
+    .tip .body { font-size: 13.5px; }
+
+    /* Activity card */
+    .act { padding: 14px 16px; }
+    .act .act-name { font-size: 15px; }
+    .act .act-where { font-size: 12px; }
+    .act .act-price { font-size: 14px; }
+
+    /* Cost table */
+    .cost-table td { font-size: 13px; padding: 9px 4px; }
+
+    /* Hide deck navigation chrome on mobile, switch to scroll mode */
+    .dots, .help { display: none; }
+    .counter {
+      top: 14px; right: 14px;
+      font-size: 11px;
+      background: rgba(10,10,10,0.85);
+      padding: 6px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Slide separators since they're stacked */
+    .slide:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 20px; right: 20px; bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    }
+
+    /* Smooth scroll snap on mobile */
+    html { scroll-behavior: smooth; }
+  }
+
+  /* ===== SMALL PHONE ===== */
+  @media (max-width: 380px) {
+    .slide { padding: 60px 14px 70px; }
+    .cover h1 { font-size: 40px; }
+    h1 { font-size: 36px; }
+    h2 { font-size: 26px; }
+    .tline { grid-template-columns: 56px 1fr; gap: 10px; padding: 10px 12px; }
+    .tline .time { font-size: 11px; }
+    .tline .what { font-size: 13.5px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .stat .num { font-size: 34px; }
+  }
+
+  /* ===== SAFE AREA (notch phones) ===== */
+  @supports (padding: max(0px)) {
+    @media (max-width: 720px) {
+      .slide {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-bottom: max(80px, env(safe-area-inset-bottom));
+      }
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1. COVER -->
+  <section class="slide active">
+    <div class="slide-inner cover">
+      <div class="pill">Jun 7 – Jun 19, 2026 · 12 days</div>
+      <h1 style="margin-top:24px;">Norway,<br><span class="accent">together.</span></h1>
+      <p class="tag">Oslo · Bergen · Fjords · Stryn · Geiranger</p>
+      <div class="meta">
+        <span><strong>Akshay</strong> &amp; <strong>Neeti</strong></span>
+        <span>·</span>
+        <span>2 travelers</span>
+        <span>·</span>
+        <span>~<strong>NOK 38k</strong> activity budget</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. AT A GLANCE -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">The journey at a glance</div>
+      <h2>Three regions. <strong>Twelve days.</strong> Zero rush.</h2>
+      <p class="subtext">Capital city, fjord capital, glacier country — connected by Norway's most scenic train, bus and flight legs.</p>
+
+      <div class="stat-grid">
+        <div class="stat card"><div class="num"><span>3</span></div><div class="label">Nights · Oslo</div></div>
+        <div class="stat card"><div class="num"><span>5</span></div><div class="label">Nights · Bergen</div></div>
+        <div class="stat card"><div class="num"><span>2</span></div><div class="label">Nights · Olden</div></div>
+        <div class="stat card"><div class="num"><span>2</span></div><div class="label">Aalesund + OSL</div></div>
+      </div>
+
+      <div class="flow" style="margin-top:42px;">
+        <div class="step"><div class="city">Oslo</div><div class="time">Jun 7 – 10</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="city">Bergen</div><div class="time">Jun 10 – 15</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="city">Olden</div><div class="time">Jun 15 – 17</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="city">Aalesund</div><div class="time">Jun 17 – 18</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="city">OSL · Home</div><div class="time">Jun 18 – 19</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. CONFIRMED BOOKINGS -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">What's locked in</div>
+      <h2>Already <strong>paid &amp; confirmed.</strong></h2>
+      <p class="subtext">Everything below is booked. Cross-reference these PNRs and confirmation codes if anything changes.</p>
+
+      <div style="margin-top:30px;">
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">✈ DEL → OSL  ·  LOT Polish via Warsaw</div>
+            <div class="b-meta">Sun Jun 7  ·  08:00 DEL → 18:55 OSL  ·  PNR <b style="color:#fff">X4VFX4</b>  ·  LO 72 / LO 483</div>
+          </div>
+          <div class="b-right">₹1,00,768 (2 pax)</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">🏠 Oslo Airbnb  ·  Stjernemyrveien 6, Haugerud</div>
+            <div class="b-meta">3 nights, Jun 7 – 10  ·  Host Turid  ·  Code HMH5DAS9PC</div>
+          </div>
+          <div class="b-right">₹21,059</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">🚆 Oslo S → Bergen  ·  Vy Tog (Bergensbanen)</div>
+            <div class="b-meta">Wed Jun 10  ·  14:25 → 21:33  ·  Booking <b style="color:#fff">MGG-NAX-FV8</b></div>
+          </div>
+          <div class="b-right">NOK 878</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">🏠 Bergen Airbnb  ·  Bakken 3, Laksevåg</div>
+            <div class="b-meta">5 nights, Jun 10 – 15  ·  Host Rahul  ·  Code HMJT4BRHSP</div>
+          </div>
+          <div class="b-right">₹37,412</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">🚌 Bergen → Nordfjordeid  ·  Vy Buss</div>
+            <div class="b-meta">Mon Jun 15  ·  08:00 → 14:21  ·  Seats 1A &amp; 1B  ·  Booking <b style="color:#fff">5WF-E3K-XBZ</b></div>
+          </div>
+          <div class="b-right">NOK 1,458</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">⛺ Nesset Fjordcamping  ·  Olden</div>
+            <div class="b-meta">Jun 15 – 17 (2 nights)  ·  Check-in 15:00 – 21:00</div>
+          </div>
+          <div class="b-right">Confirm dates</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">🚌 Olden → Aalesund  ·  Bus (Wed Jun 17 morning)</div>
+            <div class="b-meta">FRAM bus 250 / Vy via Stryn–Hellesylt-ferry–Geiranger or Stryn–Volda  ·  ~5–6 hrs</div>
+          </div>
+          <div class="b-right">NOT YET BOOKED</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">⛺ Volsdalen Camping  ·  Aalesund (Wed Jun 17)</div>
+            <div class="b-meta">Volsdalsberga, ~3 km E of city centre · cabin / motorhome / tent · fjord-side</div>
+          </div>
+          <div class="b-right">Confirm dates</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">🚗 Rental car  ·  Aalesund Airport (AES)</div>
+            <div class="b-meta">Pickup Wed Jun 17, 15:00  →  Drop Thu Jun 18, 15:00  ·  same location</div>
+          </div>
+          <div class="b-right">BOOKED ✓</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">✈ Aalesund → Oslo  ·  Norwegian DY415</div>
+            <div class="b-meta">Thu Jun 18, ~17:00 dep  ·  Order 1111-962-755  ·  Checked bag 1×23kg each</div>
+          </div>
+          <div class="b-right">₹12,815</div>
+        </div>
+        <div class="booking-row">
+          <div class="b-left">
+            <div class="b-name">✈ OSL → DEL  ·  LOT via Gdansk &amp; Warsaw</div>
+            <div class="b-meta">Fri Jun 19  ·  09:45 OSL → 02:55 DEL (Sat)  ·  LO 2306 / 3836 / 71</div>
+          </div>
+          <div class="b-right">Included in PNR</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DAY 1 — ARRIVAL -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 01</span>
+        <span class="day-date">Sunday, June 7  ·  Arrival in Oslo</span>
+      </div>
+      <h3>Land &amp; settle in. <span style="color:#86868b;font-weight:400;">Skip the touring tonight.</span></h3>
+
+      <div class="timeline" style="margin-top:24px;">
+        <div class="tline"><div class="time">18:55</div><div class="what"><b>Land Oslo Gardermoen (OSL)</b> on LO 483 from Warsaw.<span class="hint">Clear immigration → collect bags → head to ground transport.</span></div></div>
+        <div class="tline"><div class="time">19:30</div><div class="what"><b>Take Flytoget Airport Express</b> from OSL to Oslo S (Central) — 19 min, NOK 230/pp.<span class="hint">Alternative: Vy regional train to Oslo S, NOK 124/pp, 23 min.</span></div></div>
+        <div class="tline"><div class="time">20:00</div><div class="what"><b>From Oslo S → Haugerud</b>: T-bane Line 2 (Ellingsrudåsen direction) 6 stops, 18 min. Walk 5 min to <b>Stjernemyrveien 6</b>.<span class="hint">Ticket: Ruter app, 1-zone single = NOK 44 (valid 60 min, includes Flytoget→T-bane transfer if you used Vy).</span></div></div>
+        <div class="tline"><div class="time">20:45</div><div class="what"><b>Check in, drop bags, freshen up.</b><span class="hint">Buy a <b>7-day Ruter pass (NOK 365)</b> in the app — covers all your Oslo days.</span></div></div>
+        <div class="tline"><div class="time">21:30</div><div class="what"><b>Easy dinner near Haugerud T-bane</b> or grab quick groceries at Kiwi/Rema 1000.<span class="hint">Tomorrow's an early start — sleep is the win tonight.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DAY 2 OSLO ICONS -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 02</span>
+        <span class="day-date">Monday, June 8  ·  Oslo icons + fjord cruise</span>
+      </div>
+      <h3>Opera House → Royal Palace → <strong>fjord at sunset.</strong></h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">08:30</div><div class="what"><b>T-bane Haugerud → Jernbanetorget</b> (Line 2, 18 min). Coffee + pastry at Tim Wendelboe or Åpent Bakeri.</div></div>
+        <div class="tline"><div class="time">09:30</div><div class="what"><b>Oslo Opera House</b> — walk the marble roof, free, ~45 min. Best photos before the crowds.<span class="hint">Right next to Oslo S, no booking needed.</span></div></div>
+        <div class="tline"><div class="time">10:30</div><div class="what"><b>Stroll Karl Johans Gate</b> from Oslo S → Parliament → Royal Palace. ~1.5 km, browse cafés &amp; shops.</div></div>
+        <div class="tline"><div class="time">12:15</div><div class="what"><b>Royal Palace grounds &amp; changing of the guard at 13:30</b>. Free to walk park.</div></div>
+        <div class="tline"><div class="time">13:30</div><div class="what"><b>Lunch at Mathallen Oslo</b> (food hall) — variety, mid-priced. Tram 11 from Tinghuset, 7 min.</div></div>
+        <div class="tline"><div class="time">15:30</div><div class="what"><b>Walk down to Aker Brygge</b> waterfront. Easy 20 min stroll.</div></div>
+        <div class="tline"><div class="time">17:30</div><div class="what"><b>Oslofjord 2-hour sunset cruise</b> from Aker Brygge Pier 3.<br><b>Book:</b> norwayyachtcharter.com or fjordtours.com — <b>NOK 540/pp</b>. Reserve 1 day ahead.<span class="hint">June sunset ~22:45 — light is golden the whole cruise.</span></div></div>
+        <div class="tline"><div class="time">20:00</div><div class="what"><b>Dinner at Lofoten Fiskerestaurant</b> (Aker Brygge) or budget at Vippa street-food hall.</div></div>
+        <div class="tline"><div class="time">22:00</div><div class="what">T-bane back to Haugerud.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DAY 3 OSLO CULTURE -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 03</span>
+        <span class="day-date">Tuesday, June 9  ·  Vigeland · Bygdøy · Aker Brygge</span>
+      </div>
+      <h3>Sculpture park, polar ship, harbor walk.</h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">09:00</div><div class="what"><b>Tram 12 → Vigelandsparken stop.</b> Walk Frogner / Vigeland Sculpture Park — 200+ sculptures, free, 1.5–2 hrs.</div></div>
+        <div class="tline"><div class="time">11:30</div><div class="what"><b>Bus 30 to Bygdøy peninsula</b> (museum island), 20 min.</div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what"><b>Fram Museum</b> — polar exploration ship, NOK 140/pp, ~2 hrs. <span class="hint">Combo ticket with Kon-Tiki next door = NOK 220/pp if you want both.</span></div></div>
+        <div class="tline"><div class="time">14:30</div><div class="what"><b>Bygdøy ferry → Aker Brygge</b> (summer ferry, NOK 80/pp, 15 min). Lunch at Vippa harbor food hall.</div></div>
+        <div class="tline"><div class="time">16:30</div><div class="what"><b>Walk Aker Brygge → Tjuvholmen</b>, browse Astrup Fearnley Museum exterior &amp; sculpture garden.</div></div>
+        <div class="tline"><div class="time">18:00</div><div class="what"><b>Sørenga Sjøbad</b> — outdoor harbor pool &amp; sun deck. Free. Sunset views over the fjord.</div></div>
+        <div class="tline"><div class="time">20:00</div><div class="what"><b>Dinner: Vaaghals or Mucho Mas</b> in Bjørvika district. Walkable from Sørenga.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. DAY 4 OSLO->BERGEN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 04</span>
+        <span class="day-date">Wednesday, June 10  ·  Oslo viewpoint → Bergen scenic train</span>
+      </div>
+      <h3>Holmenkollen morning, then <strong>7 hrs of Norway out the window.</strong></h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">08:30</div><div class="what"><b>Pack &amp; check out</b>. Leave bags at Oslo S left-luggage (NOK 75/locker).</div></div>
+        <div class="tline"><div class="time">09:30</div><div class="what"><b>T-bane Line 1 → Holmenkollen</b> (24 min from Oslo S). Walk up to ski-jump tower &amp; viewpoint, 1.5 hrs.<span class="hint">Skip the museum (paid) unless you have extra time — the panorama is the reward.</span></div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what"><b>Back to Oslo S</b>. Quick lunch at Mathallen or sushi at Alex Sushi (near station).</div></div>
+        <div class="tline"><div class="time">13:30</div><div class="what">Collect bags, head to platform 9–11 area.</div></div>
+        <div class="tline"><div class="time">14:25</div><div class="what"><b>🚆 Vy Bergensbanen departs</b> (booking MGG-NAX-FV8, Flex tickets).<span class="hint">Sit on right side outbound for best views around Finse &amp; Hardangervidda plateau. Buffet car onboard.</span></div></div>
+        <div class="tline"><div class="time">21:33</div><div class="what"><b>Arrive Bergen Stasjon.</b></div></div>
+        <div class="tline"><div class="time">21:45</div><div class="what"><b>Bybanen Line 1 → Byparken → Olav Kyrres Gate E</b>. From there, <b>Bus 6 → Laksevåg stop</b>. Walk to <b>Bakken 3</b>, host Rahul.<span class="hint">Download <b>Skyss Billett app</b>, buy zone-1 24-hr or weekly pass. One ticket = bus + bybanen.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. BERGEN OVERVIEW -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Bergen · 5 days · Days 5–9</div>
+      <h2>Fjord capital, <strong>five ways.</strong></h2>
+      <p class="subtext">Pace yourself: heavy fjord days bookended by lighter city days. Rent the car only on Day 7 (Hardanger). Everything else is public transport.</p>
+
+      <div class="b-grid">
+        <div class="b-day">
+          <div class="b-d-num">Day 5</div>
+          <div class="b-d-date">Thu Jun 11</div>
+          <div class="b-d-title">Fløyen + Bryggen</div>
+          <div class="b-d-body">Funicular up Mt Fløyen (NOK 180 r/t), wander Bryggen UNESCO wharf, Fish Market. Easy recovery day.</div>
+          <div class="b-d-cost">~NOK 400/pax</div>
+        </div>
+        <div class="b-day">
+          <div class="b-d-num">Day 6</div>
+          <div class="b-d-date">Fri Jun 12</div>
+          <div class="b-d-title">Rosendal day trip</div>
+          <div class="b-d-body">Skyssbåt fast-ferry to Rosendal village. Baroniet Rosendal castle &amp; gardens, Folgefonna glacier views, return ferry. Slower, less touristy.</div>
+          <div class="b-d-cost">~NOK 1,400/pax</div>
+        </div>
+        <div class="b-day">
+          <div class="b-d-num">Day 7</div>
+          <div class="b-d-date">Sat Jun 13</div>
+          <div class="b-d-title">Hardangerfjord drive</div>
+          <div class="b-d-body">Rental car day. Steinsdalsfossen (walk behind it), Hardanger Bridge, Eidfjord village, return.</div>
+          <div class="b-d-cost">~NOK 1,500 (car +fuel)</div>
+        </div>
+        <div class="b-day">
+          <div class="b-d-num">Day 8</div>
+          <div class="b-d-date">Sun Jun 14</div>
+          <div class="b-d-title">Ulriken + Mostraumen</div>
+          <div class="b-d-body">Cable car up Ulriken (best Bergen panorama), Mostraumen 3-hr fjord cruise from Zachariasbryggen.</div>
+          <div class="b-d-cost">~NOK 1,100/pax</div>
+        </div>
+        <div class="b-day">
+          <div class="b-d-num">Day 9</div>
+          <div class="b-d-date">Mon Jun 15</div>
+          <div class="b-d-title">Bus to Olden</div>
+          <div class="b-d-body">08:00 bus to Nordfjordeid (paid). Onward connection bus / pre-booked transfer to Olden.</div>
+          <div class="b-d-cost">Already paid</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. DAY 5 BERGEN FLOYEN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 05</span>
+        <span class="day-date">Thursday, June 11  ·  Mt Fløyen + Bryggen</span>
+      </div>
+      <h3>Slow city day to recover from yesterday's train.</h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">09:30</div><div class="what"><b>Bus 6 from Laksevåg → Festplassen</b> (city centre).</div></div>
+        <div class="tline"><div class="time">10:00</div><div class="what"><b>Fløibanen funicular</b> from Vetrlidsallmenningen 23A. <b>NOK 180/pp</b> round trip, 6 min ride.<span class="hint">Buy at floyen.no or at the kiosk. No need to book ahead in June except weekends.</span></div></div>
+        <div class="tline"><div class="time">10:30</div><div class="what"><b>Walk around Skomakerdiket lake</b> + viewpoint. Easy 1.5 hr loop trail. Optional troll forest for kids/photos.</div></div>
+        <div class="tline"><div class="time">12:30</div><div class="what"><b>Funicular down → lunch at Fish Market</b> (Mathallen Bergen).<span class="hint">Try fish soup or skagen toast. Mid-budget pick: Pingvinen for traditional Norwegian.</span></div></div>
+        <div class="tline"><div class="time">14:30</div><div class="what"><b>Bryggen wharf walk</b> — UNESCO wooden buildings, side alleys, small museums &amp; boutiques. 2 hrs.</div></div>
+        <div class="tline"><div class="time">17:00</div><div class="what"><b>Walk Nordnes peninsula</b> — quiet residential streets, swimming pool &amp; aquarium views.</div></div>
+        <div class="tline"><div class="time">19:00</div><div class="what"><b>Dinner: Bryggen Tracteursted</b> (historic, splurge) or <b>Trekroneren</b> sausages (cheap).</div></div>
+        <div class="tline"><div class="time">21:00</div><div class="what">Bus 6 back to Laksevåg. Early-ish night — tomorrow is a 6 AM start.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. DAY 6 ROSENDAL -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 06</span>
+        <span class="day-date">Friday, June 12  ·  Rosendal day trip</span>
+      </div>
+      <h3>Fjord ferry south, <strong>Norway's only barony, glacier views.</strong></h3>
+
+      <div class="card" style="margin:18px 0; padding:18px;">
+        <div style="font-size:14px; color:#f5f5f7;"><b style="color:#fff">📌 Booking:</b> Round-trip ferry on Norled Skyssbåt — <b style="color:#DA7756">~NOK 750/pp r/t</b>. Book at <b>norled.no</b> or <b>en.visitsunnhordland.no</b>. Add Baroniet Rosendal entry ticket NOK 175/pp on site at <b>baroniet.no</b>.</div>
+      </div>
+
+      <div class="timeline">
+        <div class="tline"><div class="time">07:30</div><div class="what"><b>Bus 6 Laksevåg → Festplassen</b>. Walk to Strandkaiterminalen ferry pier.</div></div>
+        <div class="tline"><div class="time">08:00</div><div class="what"><b>🚢 Express ferry Bergen → Rosendal</b> (Skyssbåt 1502 to Rosendal). ~2h 15m through Hardangerfjord branches. Sit upper deck for views.<span class="hint">Light breakfast onboard café — limited menu, eat before boarding if hungry.</span></div></div>
+        <div class="tline"><div class="time">10:15</div><div class="what"><b>Arrive Rosendal harbor.</b> Walk 10 min to Baroniet through the village.</div></div>
+        <div class="tline"><div class="time">10:45</div><div class="what"><b>Baroniet Rosendal</b> — Norway's only barony, manor house from 1665. Guided English tour at <b>11:00</b> (~45 min). Then explore the romantic <b>rose garden</b> &amp; orchard.<span class="hint">Most beautiful when roses bloom mid-June. Bring camera.</span></div></div>
+        <div class="tline"><div class="time">12:30</div><div class="what"><b>Lunch at Baroniet Café</b> (light, garden setting) or walk to <b>Snikkeriet</b> in town for heartier meal.</div></div>
+        <div class="tline"><div class="time">14:00</div><div class="what"><b>Hike toward Hattebergsfossen waterfall</b> — easy 30-min uphill from Baroniet, gorgeous cascade in the woods. OR rent e-bike at harbor for fjord-side ride toward Folgefonna NP entrance.<span class="hint">Glacier-foot tours from Rosendal exist (Folgefonni Breførarlag) but they take a full day — skip on a return-same-day plan.</span></div></div>
+        <div class="tline"><div class="time">15:30</div><div class="what"><b>Wander Rosendal village</b> — galleries, Kvinnherad church, fjord shore. Quietest fjord village you'll see all trip.</div></div>
+        <div class="tline"><div class="time">16:30</div><div class="what"><b>🚢 Return ferry Rosendal → Bergen</b> (~2h 15m). Sunset light through the islands.</div></div>
+        <div class="tline"><div class="time">18:45</div><div class="what">Arrive Bergen. Walk to <b>Pingvinen</b> for traditional Norwegian dinner, or self-cook back at Bakken 3 (groceries at Coop near Laksevåg).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. DAY 7 HARDANGER -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 07</span>
+        <span class="day-date">Saturday, June 13  ·  Hardangerfjord road trip</span>
+      </div>
+      <h3>Rent a car for one day. Drive Norway's <strong>orchard fjord.</strong></h3>
+
+      <div class="card" style="margin:14px 0; padding:18px;">
+        <b style="color:#fff">🚗 Car rental:</b> Pre-book Hertz / Sixt / Europcar from Bergen city or airport — <b style="color:#DA7756">NOK 900–1,200/day</b> (compact auto). Pick up 08:00, return 21:00. Fuel ~NOK 400. Tolls auto-charged via plate (~NOK 100).
+      </div>
+
+      <div class="timeline">
+        <div class="tline"><div class="time">08:00</div><div class="what"><b>Pick up rental</b> at Bergen Bystasjon or city centre office.</div></div>
+        <div class="tline"><div class="time">09:30</div><div class="what"><b>Drive E16 → Norheimsund</b> via Hardangerfjord-bridge (~1.5 hr).</div></div>
+        <div class="tline"><div class="time">11:00</div><div class="what"><b>Steinsdalsfossen</b> — short stop, walk behind the waterfall. Free, 30 min.</div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what"><b>Drive to Eidfjord</b> via the Hardanger Bridge — gorgeous suspension cross. ~1.5 hr with photo stops.</div></div>
+        <div class="tline"><div class="time">13:30</div><div class="what"><b>Lunch in Eidfjord</b> at Quality Vøringfoss Hotel terrace or Eidfjord Gjestgiveri.</div></div>
+        <div class="tline"><div class="time">15:00</div><div class="what"><b>Vøringsfossen waterfall viewpoint</b> — Norway's most famous waterfall, dramatic stepped platforms. 30 min drive from Eidfjord.</div></div>
+        <div class="tline"><div class="time">17:00</div><div class="what"><b>Return drive to Bergen</b> — alternate route via Granvin if time permits, otherwise retrace E16.</div></div>
+        <div class="tline"><div class="time">20:30</div><div class="what">Drop car. Casual dinner near Laksevåg.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. DAY 8 ULRIKEN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 08</span>
+        <span class="day-date">Sunday, June 14  ·  Mt Ulriken + Mostraumen cruise</span>
+      </div>
+      <h3>Best Bergen panorama, <strong>then a different fjord.</strong></h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">09:00</div><div class="what"><b>Bus 2 from Festplassen → Haukeland</b> stop. Free shuttle from Haukeland to Ulriksbanen base station (or 12 min walk).</div></div>
+        <div class="tline"><div class="time">09:45</div><div class="what"><b>Ulriksbanen cable car up Mt Ulriken</b> — 643 m, the highest of Bergen's 7 mountains. <b>NOK 425/pp round trip.</b><span class="hint">If feeling fit: hike down the marked trail in 1.5 hrs (one-way ticket up = NOK 285).</span></div></div>
+        <div class="tline"><div class="time">11:30</div><div class="what">Back in city. Lunch at <b>Bare Vestland</b> or <b>Colonialen Litteraturhuset</b>.</div></div>
+        <div class="tline"><div class="time">13:00</div><div class="what"><b>🚢 Mostraumen Fjord Cruise</b> from Zachariasbryggen pier. 3 hrs through narrow Mostraumen strait, waterfalls, rapids. <b>NOK 690/pp.</b><br><b>Book:</b> rodne.no — pre-book in summer.</div></div>
+        <div class="tline"><div class="time">16:30</div><div class="what">Back at harbor. Walk the <b>Bryggen alleys</b> you missed earlier or visit <b>KODE art museums</b> (NOK 160/pp).</div></div>
+        <div class="tline"><div class="time">19:00</div><div class="what"><b>Last Bergen dinner: Bare</b> (Michelin), <b>Lysverket</b>, or <b>Pingvinen</b> (budget). Pack tonight — early bus tomorrow.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. DAY 9 BERGEN -> OLDEN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 09</span>
+        <span class="day-date">Monday, June 15  ·  Bergen → Nordfjordeid → Olden</span>
+      </div>
+      <h3>Travel day. Settle into fjord camping.</h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">06:30</div><div class="what"><b>Check out Bakken 3.</b> Bus 6 → Bergen Busstasjon (15 min). Grab breakfast to-go.</div></div>
+        <div class="tline"><div class="time">08:00</div><div class="what"><b>🚌 Vy Buss Bergen → Nordfjordeid</b> (booking 5WF-E3K-XBZ). Seats 1A &amp; 1B at the front — best views. ~6 hrs through fjord country.</div></div>
+        <div class="tline"><div class="time">14:21</div><div class="what"><b>Arrive Nordfjordeid rutebilstasjon.</b><span class="hint">Onward to Olden: there's no direct bus that pairs nicely. Best options below 👇</span></div></div>
+        <div class="tline"><div class="time">14:45</div><div class="what"><b>Connect to Olden:</b><br>• <b>Option A — Bus:</b> route 240/430 Nordfjordeid → Stryn (~1 hr) then bus 250 Stryn → Olden (~25 min). <b>NOK 250/pp.</b><br>• <b>Option B — Pre-arranged taxi/transfer:</b> Nordfjord Taxi +47 57 86 50 22, ~NOK 1,800 for 2 (45 min direct).<br>• <b>Option C — Rent car at Nordfjordeid Avis</b> (book ahead) — covers your next 3 days too. <b>NOK 900–1,100/day.</b><span class="hint"><b>Recommended: Option C</b> — you'll need a car in Stryn anyway. Drop at Aalesund Airport on Day 12.</span></div></div>
+        <div class="tline"><div class="time">16:30</div><div class="what"><b>Check in Nesset Fjordcamping, Olden.</b> Reception at red building by fjord. Pay on site (iZettle).<span class="hint">WiFi password on poster. Cleaning + bed linen included.</span></div></div>
+        <div class="tline"><div class="time">17:30</div><div class="what"><b>Settle, walk fjord shore</b>. Optional free boat to Mølla Guesthouse for dinner across the bay (book at reception).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. DAY 10 OLDEN PUBLIC TRANSPORT -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 10</span>
+        <span class="day-date">Tuesday, June 16  ·  Briksdal Glacier + Loen Skylift  ·  Public transport only</span>
+      </div>
+      <h3>One ambitious day, <strong>two iconic stops, no car.</strong></h3>
+
+      <div class="card" style="margin:14px 0; padding:16px;">
+        <div style="font-size:14px; color:#f5f5f7;"><b style="color:#fff">📌 Confirm bus times the night before</b> at <b>entur.no</b> or in the <b>FRAM app</b>. Summer schedules start ~mid-June. Reception at Nesset can also help check.<br><b>Backup:</b> Nesset offers a <b>free boat</b> to Mølla restaurant + you can charter local boat tours from camping.</div>
+      </div>
+
+      <div class="timeline">
+        <div class="tline"><div class="time">07:30</div><div class="what">Breakfast. Pack layers + waterproof shoes — Briksdal trail is misty.</div></div>
+        <div class="tline"><div class="time">08:30</div><div class="what"><b>🚌 Local bus Olden → Briksdal Mountain Lodge</b> (FRAM line 250 / summer tourist shuttle). ~30 min.<span class="hint">Confirm departure on entur.no the night before — line is seasonal.</span></div></div>
+        <div class="tline"><div class="time">09:15</div><div class="what"><b>Walk to Briksdal Glacier viewpoint</b> — 3 km gentle uphill, ~1 hr each way. Past Kleivafossen waterfall to glacier tongue.<span class="hint">Lazy option: <b>Troll Car</b> shuttle NOK 250/pp r/t — saves the climb.</span></div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what"><b>Quick lunch at Briksdal Café</b> (NOK 200/pp). Catch <b>return bus to Olden / Loen</b> ~12:30–13:00.</div></div>
+        <div class="tline"><div class="time">13:30</div><div class="what"><b>Bus / walk to Loen Skylift base station</b> (Hotel Alexandra Loen). Loen is 7 km from Olden — <b>FRAM bus 252</b> connects, ~15 min.</div></div>
+        <div class="tline"><div class="time">14:00</div><div class="what"><b>Loen Skylift</b> — 5 min cable car to Mt Hoven (1,011 m). <b>NOK 695/pp r/t.</b><br><b>Book:</b> <b>loenskylift.com</b> — buy slot same morning. Easy summit trails + edge restaurant.</div></div>
+        <div class="tline"><div class="time">16:30</div><div class="what"><b>Walk down to Lovatnet</b> (Loen end) — 20 min stroll. Norway's most photogenic turquoise lake. <b>Breng Seter</b> farm café for waffles &amp; coffee.</div></div>
+        <div class="tline"><div class="time">18:00</div><div class="what"><b>Bus Loen → Olden</b> (~15 min). Back at Nesset.</div></div>
+        <div class="tline"><div class="time">19:30</div><div class="what"><b>Free boat to Mølla Guesthouse</b> across the bay (book at reception) for fjord-side dinner. Otherwise self-cook.<span class="hint">Daylight stays till past midnight — there's no rush.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. DAY 11 OLDEN -> AALESUND -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 11</span>
+        <span class="day-date">Wednesday, June 17  ·  Olden → Aalesund + Car pickup 15:00</span>
+      </div>
+      <h3>Travel morning, <strong>Aalesund Art Nouveau evening.</strong></h3>
+
+      <div class="card" style="margin:14px 0; padding:16px;">
+        <div style="font-size:14px; color:#f5f5f7;"><b style="color:#fff">📌 Bus to book</b> on <b>vy.no</b> or via <b>FRAM</b> (frammr.no): <b>Olden → Stryn → Hellesylt → ferry → Geiranger → Aalesund</b> (most scenic, ~6 hrs) <b>OR</b> <b>Olden → Stryn → Volda → Aalesund</b> via Eiksund tunnel (faster, ~5 hrs). Pick the route that lands you at <b>AES Airport before 14:30</b>.</div>
+      </div>
+
+      <div class="timeline">
+        <div class="tline"><div class="time">07:00</div><div class="what">Pack &amp; settle bill at Nesset Fjordcamping reception (iZettle, card). Quick breakfast.</div></div>
+        <div class="tline"><div class="time">07:30</div><div class="what"><b>🚌 Bus Olden → Stryn</b> (FRAM 250, ~25 min). Connect to onward Aalesund coach.<span class="hint">Tighter: a single Nor-Way Bussekspress / Vy bus from Stryn ~08:00 → Aalesund ~12:30 may exist on weekday — check entur.no.</span></div></div>
+        <div class="tline"><div class="time">08:00</div><div class="what"><b>🚌 Long-distance bus Stryn → Aalesund</b> (~4–5 hrs depending on route). Confirm seat in advance for luggage.<span class="hint">If using the Hellesylt–Geiranger route, the ferry is the highlight — sit on top deck.</span></div></div>
+        <div class="tline"><div class="time">13:00</div><div class="what"><b>Arrive Aalesund city / bus station.</b> Quick lunch at <b>Hummer &amp; Kanari</b> or grab a sandwich at the bus stop.</div></div>
+        <div class="tline"><div class="time">14:00</div><div class="what"><b>Bus / Flybussen → Aalesund Airport (AES, Vigra)</b> — ~25 min from city. Schedule airport-bound coaches.<span class="hint">Alternative: keep luggage at the station and pickup car directly from city — but your booking is at AES, so head there first.</span></div></div>
+        <div class="tline"><div class="time">15:00</div><div class="what"><b>🚗 Pick up rental car at AES Airport.</b> Bring driving licence, IDP, credit card. Confirm fuel policy + insurance.</div></div>
+        <div class="tline"><div class="time">15:45</div><div class="what"><b>Drive AES → Volsdalen Camping</b> (~30 min via Rv658). Address: <b>Volsdalsberga, 6020 Aalesund</b>. Check in at reception, drop bags in cabin.<span class="hint">Camping has lake/fjord views, kitchen, hot showers. Bus 14 / 618 connects to city centre in ~10 min if you want to leave the car parked.</span></div></div>
+        <div class="tline"><div class="time">17:00</div><div class="what"><b>Drive / bus into Aalesund city → Aksla Viewpoint</b> via Fjellstua road OR walk the 418 stairs from Stadtparken. Best Aalesund panorama, free. 30 min.</div></div>
+        <div class="tline"><div class="time">18:30</div><div class="what"><b>Walk Art Nouveau old town</b> — Aalesund was rebuilt in Jugendstil after the 1904 fire. Compact, walkable, photogenic.</div></div>
+        <div class="tline"><div class="time">20:00</div><div class="what"><b>Dinner at XL Diner</b> (klippfisk specialty) or <b>Apotekergata No. 5</b>. Drive back to Volsdalen, self-cook breakfast supplies for tomorrow's early start.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. DAY 12 AALESUND CAR DAY -> OSLO -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 12</span>
+        <span class="day-date">Thursday, June 18  ·  Sunnmøre car day · drop 15:00 · fly OSL 17:00</span>
+      </div>
+      <h3>Car returns at 3, flight at 5 — <strong>plan tight, drive light.</strong></h3>
+
+      <div class="card" style="margin:14px 0; padding:16px;">
+        <div style="font-size:14px; color:#f5f5f7;"><b style="color:#fff">📌 Hard constraint:</b> rental drop <b>15:00 at AES</b>, flight DY415 <b>~17:00</b>. Plan to be back at airport by <b>14:30</b> with full tank. Pick <b>ONE</b> of the two routes below — don't try both.</div>
+      </div>
+
+      <h3 style="font-size:20px; margin-top:14px; color:#DA7756;">Option A — Trollstigen + Geiranger loop (best scenic)</h3>
+      <div class="timeline" style="margin-top:8px;">
+        <div class="tline"><div class="time">06:30</div><div class="what">Early breakfast, check out of Volsdalen Camping, drive south.</div></div>
+        <div class="tline"><div class="time">07:00</div><div class="what"><b>Drive Aalesund → Linge ferry → Geiranger</b> (~2.5 hrs). Stop at <b>Dalsnibba viewpoint</b> (NOK 175 toll) for the iconic panorama.</div></div>
+        <div class="tline"><div class="time">10:00</div><div class="what"><b>🚢 Geirangerfjord 1.5-hr cruise</b> — Seven Sisters waterfall, cliff-side farms. <b>NOK 470/pp.</b> Book at <b>geirangerfjord.no</b>.</div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what">Quick lunch at <b>Brasserie Posten</b> Geiranger. Then drive back via <b>Eagle Road</b> (Ørnevegen) — 11 hairpin turns.</div></div>
+        <div class="tline"><div class="time">14:00</div><div class="what">Refuel near Ørsta or Magerholm. Head to AES.</div></div>
+        <div class="tline"><div class="time">14:45</div><div class="what"><b>🚗 Drop car at AES Airport.</b></div></div>
+      </div>
+
+      <h3 style="font-size:20px; margin-top:18px; color:#DA7756;">Option B — Atlantic Road / Runde Island (lighter)</h3>
+      <div class="timeline" style="margin-top:8px;">
+        <div class="tline"><div class="time">08:00</div><div class="what"><b>Drive to Runde Island</b> (~1.5 hrs) — puffin colony, sea-bird cliffs, easy hike to Goksøyr lighthouse.</div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what">Lunch at Christineborg Cafe / Runde Miljøsenter. Drive back via <b>Godøy lighthouse</b> if time.</div></div>
+        <div class="tline"><div class="time">14:30</div><div class="what">Refuel + drop car at AES.</div></div>
+      </div>
+
+      <div class="timeline" style="margin-top:14px;">
+        <div class="tline"><div class="time">15:00</div><div class="what"><b>Check in for DY415 Norwegian</b> at AES. Bag drop, security.</div></div>
+        <div class="tline"><div class="time">17:00</div><div class="what"><b>✈ Aalesund → Oslo on DY415</b> (~55 min). Confirm exact dep time in Norwegian app.</div></div>
+        <div class="tline"><div class="time">18:15</div><div class="what">Land OSL. Walk to <b>Radisson Blu Airport Hotel</b> (covered walkway, 5 min) OR shuttle to <b>Park Inn / Comfort Runway / Best Western Letohallen</b>.<span class="hint"><b>NOT YET BOOKED</b> — reserve 2–3 wks before. Need pickup-airport breakfast option for Friday's 07:00 walk to terminal.</span></div></div>
+        <div class="tline"><div class="time">20:00</div><div class="what">Dinner at hotel. File <b>India E-Arrival card</b> tonight (within 72 hrs of Sat Jun 20 landing).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. DAY 13 DEPARTURE -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="day-header">
+        <span class="day-num">Day 13</span>
+        <span class="day-date">Friday, June 19  ·  Oslo → Delhi</span>
+      </div>
+      <h3>Home. <strong>Take the souvenirs, leave the wallet lighter.</strong></h3>
+
+      <div class="timeline" style="margin-top:20px;">
+        <div class="tline"><div class="time">06:00</div><div class="what">Wake, light breakfast at hotel. Most airport hotels offer included.</div></div>
+        <div class="tline"><div class="time">07:00</div><div class="what"><b>Hotel shuttle / 5-min walk to OSL terminal</b>. Check bags, security.</div></div>
+        <div class="tline"><div class="time">09:45</div><div class="what"><b>✈ LO 2306 OSL → Gdansk</b> (1h 35m).</div></div>
+        <div class="tline"><div class="time">11:20</div><div class="what">Land Gdansk. <b>40-min layover</b> — stay near gate, no time to wander.</div></div>
+        <div class="tline"><div class="time">12:00</div><div class="what"><b>✈ LO 3836 Gdansk → Warsaw</b> (1h).</div></div>
+        <div class="tline"><div class="time">13:00</div><div class="what">Land Warsaw. <b>2h 55m layover</b> — duty-free + lounge if available.</div></div>
+        <div class="tline"><div class="time">15:55</div><div class="what"><b>✈ LO 71 Warsaw → Delhi</b> (7h 30m).</div></div>
+        <div class="tline"><div class="time">02:55</div><div class="what"><b>Land DEL Sat Jun 20.</b> E-Arrival card must be filed within 72 hrs before arrival → do it on Day 12.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. ACTIVITIES TO BOOK -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Book ahead — June fills up</div>
+      <h2>Reserve these <strong>2–4 weeks before.</strong></h2>
+      <p class="subtext">Funiculars and city tours can be walk-up; cruises &amp; the Nutshell tour sell out for peak summer dates.</p>
+
+      <div class="act-grid">
+        <div class="act">
+          <div class="act-name">Rosendal day trip (ferry + Baroniet)</div>
+          <div class="act-when">Book 1 wk ahead · Fri Jun 12</div>
+          <div class="act-where">Ferry: <b>norled.no</b> (Skyssbåt 1502)<br>Castle entry: <b>baroniet.no</b> (NOK 175/pp on site)</div>
+          <div class="act-price">NOK 750 + 175/pp · ~₹7,900 for 2</div>
+        </div>
+        <div class="act">
+          <div class="act-name">Mostraumen Fjord Cruise</div>
+          <div class="act-when">Book 1 wk ahead · Sun Jun 14, 13:00</div>
+          <div class="act-where">Site: <b>rodne.no</b><br>Departs Zachariasbryggen pier. 3 hrs, narrow fjord cruise.</div>
+          <div class="act-price">NOK 690/pp · ~₹5,900 for 2</div>
+        </div>
+        <div class="act">
+          <div class="act-name">Loen Skylift</div>
+          <div class="act-when">Book 1 day ahead · Tue Jun 16</div>
+          <div class="act-where">Site: <b>loenskylift.com</b><br>Pick a 14:00 slot for afternoon light.</div>
+          <div class="act-price">NOK 695/pp · ~₹5,950 for 2</div>
+        </div>
+        <div class="act">
+          <div class="act-name">Geirangerfjord Cruise</div>
+          <div class="act-when">Book 1 wk ahead · Thu Jun 18, 10:30</div>
+          <div class="act-where">Site: <b>geirangerfjord.no</b><br>Confirm sailing aligns with your AES flight.</div>
+          <div class="act-price">NOK 470/pp · ~₹4,000 for 2</div>
+        </div>
+        <div class="act">
+          <div class="act-name">Oslofjord Sunset Cruise</div>
+          <div class="act-when">Book 1 day ahead · Mon Jun 8, 17:30</div>
+          <div class="act-where">Site: <b>norwayyachtcharter.com</b> or <b>fjordtours.com</b><br>Aker Brygge Pier 3.</div>
+          <div class="act-price">NOK 540/pp · ~₹4,600 for 2</div>
+        </div>
+        <div class="act">
+          <div class="act-name">Car rentals (2 separate)</div>
+          <div class="act-when">Book 2–3 wk ahead</div>
+          <div class="act-where">Day 7: Bergen 1-day. Days 9–12: Nordfjordeid pickup → AES drop.<br>Try <b>Sixt</b>, <b>Hertz</b>, <b>Europcar</b>.</div>
+          <div class="act-price">~NOK 5,500 total</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19. BUDGET -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Money map</div>
+      <h2>What it costs <strong>(approx, 2 pax).</strong></h2>
+      <p class="subtext">Already-paid items in NOK or INR as booked. Variable items are typical mid-budget.</p>
+
+      <div class="two-col" style="margin-top:24px;">
+        <div class="card">
+          <h3 style="font-size:22px;">Already paid</h3>
+          <table class="cost-table">
+            <tr><td>Flights (DEL ↔ OSL)</td><td>₹1,00,768</td></tr>
+            <tr><td>Aalesund → Oslo flight</td><td>₹12,815</td></tr>
+            <tr><td>Oslo Airbnb (3 nt)</td><td>₹21,059</td></tr>
+            <tr><td>Bergen Airbnb (5 nt)</td><td>₹37,412</td></tr>
+            <tr><td>Train Oslo → Bergen</td><td>NOK 878</td></tr>
+            <tr><td>Bus Bergen → Nordfjordeid</td><td>NOK 1,458</td></tr>
+            <tr class="total"><td>Subtotal</td><td>₹1,72,054 + NOK 2,336</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3 style="font-size:22px;">To budget on the ground</h3>
+          <table class="cost-table">
+            <tr><td>Activities &amp; cruises (all)</td><td>NOK 8,200</td></tr>
+            <tr><td>AES car rental (24 hrs)</td><td>NOK 1,400</td></tr>
+            <tr><td>Olden camping (2 nt)</td><td>NOK 1,600</td></tr>
+            <tr><td>Volsdalen Camping (Jun 17)</td><td>NOK 900</td></tr>
+            <tr><td>Oslo airport hotel (Jun 18)</td><td>NOK 1,800</td></tr>
+            <tr><td>Public transport &amp; Olden→AES bus</td><td>NOK 2,400</td></tr>
+            <tr><td>Food (self-cook 4 dinners)</td><td>NOK 12,000</td></tr>
+            <tr><td>Buffer / souvenirs</td><td>NOK 3,000</td></tr>
+            <tr class="total"><td>Subtotal</td><td>NOK 31,300 (~₹2.6L)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px; background:rgba(218,119,86,0.08); border-color:rgba(218,119,86,0.25);">
+        <div style="font-size:15px; color:#f5f5f7;"><b style="color:#DA7756">Money-saving moves:</b> self-cook 4–5 dinners (camping kitchen + Bergen Airbnb) saves ~NOK 4,000 · skip Loen Via Ferrata (NOK 2,400) · use Vy Komfort instead of taxis · refill water bottles, tap water is excellent.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. PRO TIPS -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Things first-timers miss</div>
+      <h2>Pro tips for <strong>peak Norway.</strong></h2>
+
+      <div class="tips" style="margin-top:24px;">
+        <div class="tip"><div class="icon">📱</div><div class="body"><b>Apps to install before flying:</b> Ruter (Oslo), Skyss Billett (Bergen), Vy (national trains/buses), AutoPASS Visitors (toll roads if driving), Yr (weather).</div></div>
+        <div class="tip"><div class="icon">💳</div><div class="body"><b>Cards beat cash everywhere.</b> Carry one Visa + one Mastercard. ATMs are scarce in fjord villages. Many tolls auto-bill the rental — don't pay cash.</div></div>
+        <div class="tip"><div class="icon">🌦</div><div class="body"><b>June weather is bipolar:</b> 22°C in Oslo, 6°C on Loen Skylift summit, sideways rain in Bergen 50% of days. Pack 3 layers + waterproof jacket + light gloves.</div></div>
+        <div class="tip"><div class="icon">☀</div><div class="body"><b>Daylight runs ~03:30 to ~23:30.</b> Bring eye-mask. Don't skip rest just because it's still bright at 22:00.</div></div>
+        <div class="tip"><div class="icon">🛂</div><div class="body"><b>Schengen visa</b> covers all of Norway. Carry hard-copy printout to show on departure. <b>E-Arrival India card</b> required within 72 hrs before Jun 19 return.</div></div>
+        <div class="tip"><div class="icon">📡</div><div class="body"><b>SIM:</b> Pick up Telia or Telenor prepaid at OSL on arrival, ~NOK 200 for 10 GB. Or use roaming if cheap.</div></div>
+        <div class="tip"><div class="icon">⛽</div><div class="body"><b>Driving in fjord country</b>: speed limits enforced, toll plates auto-charge, ferries take cards on board, fuel ~NOK 22/litre. Drive defensively on hairpin roads.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21. FINAL -->
+  <section class="slide">
+    <div class="slide-inner cover">
+      <div class="pill">Ready to roll</div>
+      <h1 style="margin-top:30px; font-size:96px;">12 days.<br><span class="accent">Memories for life.</span></h1>
+      <p class="tag" style="margin-top:24px;">Still to book: Olden→Aalesund bus (Jun 17) · Volsdalen Camping (Jun 17) · OSL airport hotel (Jun 18) · Rosendal ferry · Loen Skylift · Geirangerfjord cruise · Oslofjord sunset cruise · Mostraumen cruise.</p>
+      <div class="meta" style="margin-top:48px;">
+        <span><strong>Trip:</strong> Jun 7 – 19, 2026</span>
+        <span>·</span>
+        <span><strong>Travelers:</strong> Akshay &amp; Neeti</span>
+        <span>·</span>
+        <span><strong>PNR:</strong> X4VFX4</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="counter" id="counter">01 / 21</div>
+<div class="dots" id="dots"></div>
+<div class="help"><kbd>←</kbd><kbd>→</kbd> navigate · <kbd>F</kbd> fullscreen</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  // Detect mobile (matches CSS breakpoint)
+  const isMobile = () => window.matchMedia('(max-width: 720px)').matches;
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => go(i);
+    dotsContainer.appendChild(d);
+  });
+  const dots = document.querySelectorAll('.dot');
+
+  function go(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    if (isMobile()) {
+      slides[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    counter.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  }
+
+  // Desktop keyboard nav
+  document.addEventListener('keydown', (e) => {
+    if (isMobile()) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(slides.length - 1);
+  });
+
+  // Click to advance — desktop only
+  document.addEventListener('click', (e) => {
+    if (isMobile()) return;
+    if (e.target.closest('.dot') || e.target.closest('a')) return;
+    go(current + 1);
+  });
+  document.addEventListener('dblclick', () => {
+    if (isMobile()) return;
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  });
+
+  // Mobile: update counter on scroll
+  function updateCounterOnScroll() {
+    if (!isMobile()) return;
+    const scrollY = window.scrollY + window.innerHeight / 2;
+    let active = 0;
+    slides.forEach((s, i) => {
+      if (s.offsetTop <= scrollY) active = i;
+    });
+    counter.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  }
+  window.addEventListener('scroll', updateCounterOnScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    if (isMobile()) {
+      slides.forEach(s => { s.classList.add('active'); });
+    } else {
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === current);
+      });
+    }
+    updateCounterOnScroll();
+  });
+  // Initial mobile setup
+  if (isMobile()) {
+    slides.forEach(s => s.classList.add('active'));
+    updateCounterOnScroll();
+  }
+
+  // Touch swipe — for tablets in deck mode (not mobile, since mobile scrolls naturally)
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    if (isMobile()) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (isMobile()) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      go(current + (dx < 0 ? 1 : -1));
+    }
+  });
+
+  // Auto-hide cursor (desktop only)
+  let cursorTimer;
+  document.addEventListener('mousemove', () => {
+    if (isMobile()) return;
+    document.body.classList.remove('cursor-hidden');
+    clearTimeout(cursorTimer);
+    cursorTimer = setTimeout(() => document.body.classList.add('cursor-hidden'), 3000);
+  });
+</script>
+</body>
+</html>
